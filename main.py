@@ -14,11 +14,20 @@ class Movimentacao(BaseModel):
     status: str
     data: datetime.datetime
 
+class Localizacao(BaseModel):
+    id_localizacao: int
+    logradouro: str
+    cep: str
+
 movimentacoes = [
     Movimentacao(id_movimentacao=1, id_encomenda=1, id_localizacao=1, status="Em trânsito", data=datetime.datetime.now()),
     Movimentacao(id_movimentacao=2, id_encomenda=1, id_localizacao=2, status="Em trânsito", data=datetime.datetime.now())
 ]
 
+localizacoes = [
+    Localizacao(id_localizacao=1, logradouro="Rua A", cep="12345-678"),
+    Localizacao(id_localizacao=2, logradouro="Rua B", cep="23456-789")
+]
 
 @app.get("/")
 def root():
@@ -62,5 +71,4 @@ def deleta_movimentacao(id_movimentacao: int):
         movimentacoes.remove(mov)
         return {"message": "Movimentação removida com sucesso"}
     raise HTTPException(status_code=404, detail="Movimentação não encontrada")
-
 
