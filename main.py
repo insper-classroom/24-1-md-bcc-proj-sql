@@ -72,3 +72,35 @@ def deleta_movimentacao(id_movimentacao: int):
         return {"message": "Movimentação removida com sucesso"}
     raise HTTPException(status_code=404, detail="Movimentação não encontrada")
 
+@app.get("/localizacao", response_model=List[Localizacao])
+def get_localizacao():
+    return localizacoes
+
+@app.post("/localizacao", response_model=Localizacao, status_code=status.HTTP_201_CREATED)
+def nova_localizacao(localizacao: Localizacao):
+    localizacoes.append(localizacao)
+    return localizacao
+
+@app.get("/localizacao/{id_localizacao}", response_model=Localizacao)
+def get_localizacao(id_localizacao: int):
+    localizacao = next(filter(lambda loc: loc.id_localizacao == id_localizacao, localizacoes), None)
+    if localizacao:
+        return localizacao
+    raise HTTPException(status_code=404, detail="Localização não encontrada")
+
+@app.put("/localizacao/{id_localizacao}", response_model=Localizacao)
+def atualiza_localizacao(id_localizacao: int, localizacao: Localizacao):
+    loc = next(filter(lambda loc: loc.id_localizacao == id_localizacao, localizacoes), None)
+    if loc:
+        loc.logradouro = localizacao.logradouro
+        loc.cep = localizacao.cep
+        return loc
+    raise HTTPException(status_code=404, detail="Localização não encontrada")
+
+@app.delete("/localizacao/{id_localizacao}", status_code=status.HTTP_204_NO_CONTENT)
+def deleta_localizacao(id_localizacao: int):
+    loc = next(filter(lambda loc: loc.id_localizacao == id_localizacao, localizacoes), None)
+    if loc:
+        localizacoes.remove(loc)
+        return {"message": "Localização removida com sucesso"}
+    raise HTTPException(status_code=404, detail="Localização não encontrada")
