@@ -1,33 +1,35 @@
 from fastapi import APIRouter, HTTPException, status # type: ignore
 from typing import List
-from models import Localizacao
-
-localizacoes = [
-    Localizacao(id_localizacao=1, logradouro="Rua A", cep="12345-678"),
-    Localizacao(id_localizacao=2, logradouro="Rua B", cep="23456-789")
-]
+from db import DB
+from models.localizacao.localizacao import *
 
 router = APIRouter()
 
 @router.get("/localizacao", response_model=List[Localizacao])
 def get_localizacao():
-    return localizacoes
+    return DB.localizacoes.values()
 
 @router.post("/localizacao", response_model=Localizacao, status_code=status.HTTP_201_CREATED)
-def nova_localizacao(localizacao: Localizacao):
-    localizacoes.append(localizacao)
-    return localizacao
+def nova_localizacao(loc: LocalizacaoIn):
+    id = len(DB.localizacoes)+1
+    loc = Localizacao(
+        id_localizacao=id,
+        logradouro=loc.logradouro,
+        cep=loc.cep
+    )
+    DB.localizacoes[id] = loc
+    return loc
 
 @router.get("/localizacao/{id_localizacao}", response_model=Localizacao)
 def get_localizacao(id_localizacao: int):
-    localizacao = next(filter(lambda loc: loc.id_localizacao == id_localizacao, localizacoes), None)
-    if localizacao:
-        return localizacao
+    loc = DB.localizacoes.get(id_localizacao)
+    if loc:
+        return loc
     raise HTTPException(status_code=404, detail="Localização não encontrada")
 
 @router.put("/localizacao/{id_localizacao}", response_model=Localizacao)
-def atualiza_localizacao(id_localizacao: int, localizacao: Localizacao):
-    loc = next(filter(lambda loc: loc.id_localizacao == id_localizacao, localizacoes), None)
+def atualiza_localizacao(id_localizacao: int, localizacao: LocalizacaoIn):
+    loc = DB.localizacoes.get(id_localizacao)
     if loc:
         loc.logradouro = localizacao.logradouro
         loc.cep = localizacao.cep
@@ -36,8 +38,8 @@ def atualiza_localizacao(id_localizacao: int, localizacao: Localizacao):
 
 @router.delete("/localizacao/{id_localizacao}", status_code=status.HTTP_204_NO_CONTENT)
 def deleta_localizacao(id_localizacao: int):
-    loc = next(filter(lambda loc: loc.id_localizacao == id_localizacao, localizacoes), None)
+    loc = DB.localizacoes.get(id_localizacao)
     if loc:
-        localizacoes.remove(loc)
+        del DB.localizacoes[id_localizacao]
         return {"message": "Localização removida com sucesso"}
     raise HTTPException(status_code=404, detail="Localização não encontrada")

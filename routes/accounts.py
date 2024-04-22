@@ -2,29 +2,27 @@ from fastapi import APIRouter, HTTPException, status
 
 from typing import List, Dict
 
-from Classes.user.user import User
-from Classes.user.user_in import UserIn
-from Classes.user.user_out import UserOut
-from Classes.user.user_update import UserUpdateSenha
+from models.user.user import User
+from models.user.user_in import UserIn
+from models.user.user_out import UserOut
+from models.user.user_update import UserUpdateSenha
 
+from db import DB
 
 router = APIRouter()
 
-users = {}
-
 @router.get("/accounts/", response_model=Dict[int, User])
 def list_account():
-    return users
-
+    return DB.users.values()
 
 @router.post("/accounts/", response_model=UserOut, status_code=status.HTTP_201_CREATED)
 async def create_iaccount(userIn: UserIn):
     user_dict = userIn.model_dump()
 
-    user_dict['id_user'] = len(users)
+    user_dict['id_user'] = len(DB.users)
     user_dict['senha'] = str(hash(user_dict['senha'] + user_dict['nome']))
     user = User(**user_dict)
-    users[user.id_user] = user
+    DB.users[user.id_user] = user
 
     userOut = UserOut(
         id_user=user.id_user,
@@ -40,20 +38,20 @@ async def create_iaccount(userIn: UserIn):
 
 @router.get("/accounts/{user_id}", response_model=UserOut)
 def get_account(user_id: int):
-    if user_id in users:
-        return users[user_id]
+    if user_id in DB.users:
+        return DB.users[user_id]
     return HTTPException(status_code=404, detail="Usuário não encontrado")
 
 
 @router.put("/accounts/{user_id}")
 async def update_account(user_id: int, update: UserUpdateSenha):
     update_dict = update.model_dump()
-    if user_id in users:
+    if user_id in DB.users:
 
-        if str(hash(update_dict['senha'] + users[user_id].nome)) == users[user_id].senha:
-            users[user_id].senha = str(hash(update_dict['senha_nova'] + users[user_id].nome))
+        if str(hash(update_dict['senha'] + DB.users[user_id].nome)) == DB.users[user_id].senha:
+            DB.users[user_id].senha = str(hash(update_dict['senha_nova'] + DB.users[user_id].nome))
         
-            return users[user_id]
+            return DB.users[user_id]
         
         return HTTPException(status_code=404, detail="Senha Atual Incorreta")
 
@@ -63,20 +61,20 @@ async def update_account(user_id: int, update: UserUpdateSenha):
 
 @router.get("/accounts/{user_id}/status")
 async def update_account_status(user_id: int):
-    if user_id in users:
+    if user_id in DB.users:
 
-        users[user_id].status = not users[user_id].status
+        DB.users[user_id].status = not DB.users[user_id].status
         
-        return users[user_id]
+        return DB.users[user_id]
 
     return HTTPException(status_code=404, detail="Usuário não encontrado")
 
 
 @router.delete("/accounts/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_account(user_id: int):
-    if user_id in users:
+    if user_id in DB.users:
 
-        del users[user_id]
+        del DB.users[user_id]
         
         return {'message': 'Usuário Deletado com Sucesso'}
 

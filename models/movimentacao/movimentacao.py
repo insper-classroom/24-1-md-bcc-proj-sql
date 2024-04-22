@@ -8,7 +8,10 @@ class Movimentacao(BaseModel):
     status: str
     data: datetime.datetime
 
-class Localizacao(BaseModel):
+class MovimentacaoIn(BaseModel):
+    id_encomenda: int
     id_localizacao: int
-    logradouro: str
-    cep: str
+    status: str
+
+class MovimentacaoUpdate(BaseModel):
+    status: str
