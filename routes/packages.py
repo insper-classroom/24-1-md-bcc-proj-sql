@@ -2,10 +2,8 @@ from fastapi import APIRouter, HTTPException, status
 
 from typing import List, Dict
 
-from Classes.package.package import Package
-from Classes.package.package_in import PackageIn
-from Classes.package.package_out import PackageOut
-from Classes.package.package_add_item import PackageUpdate
+from models.package.package import *
+
 
 
 router = APIRouter()

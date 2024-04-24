@@ -2,10 +2,7 @@ from fastapi import APIRouter, HTTPException, status
 
 from typing import List, Dict
 
-from Classes.item.item import Item
-from Classes.item.item_in import ItemIn
-from Classes.item.item_out import ItemOut
-from Classes.item.item_update import ItemUpdate
+from models.item.item import *
 
 
 router = APIRouter()
