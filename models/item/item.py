@@ -11,8 +11,9 @@ class Item(BaseModel):
     status: bool | None = True
 
 class ItemIn(BaseModel):
-    nome: int 
+    nome: str 
     descricao: str | None = ""
+    id_package: int
 
 class ItemUpdate(BaseModel):
     nome: str | None = None

@@ -1,111 +1,60 @@
 from fastapi import APIRouter, HTTPException, status
 
-from typing import List, Dict
-
+from typing import List
 from models.item.item import *
-
+from db import DB
 
 router = APIRouter()
 
-items = {}
-
-@router.get("/items/", response_model=Dict[int, items])
+@router.get("/items/", response_model=List[ItemOut])
 def list_items():
-    return items
-
+    return DB.getItems()
 
 @router.post("/items/", response_model=ItemOut, status_code=status.HTTP_201_CREATED)
-async def create_items(itemsIn: ItemIn):
+def create_items(itemsIn: ItemIn):
+    DB.checkPackage(itemsIn.id_package)
     items_dict = itemsIn.model_dump()
 
-    items_dict['id_item'] = len(items)
+    id = len(DB.items)+1
+    items_dict['id_item'] = id
     item = Item(**items_dict)
-    items[item.id_items] = item
+    DB.items[id] = item
 
-    itemsOut = ItemOut(
-        id_item=item.id_item,
-        nome=item.nome,
-        descricao=item.descricao,
-        status=item.status
-    )
-
-    return itemsOut
-
+    return DB.getItem(id)
 
 @router.get("/items/{items_id}", response_model=ItemOut)
 def get_items(items_id: int):
-    if items_id in items:
-
-        item = items[items_id]
-        itemsOut = ItemOut(
-            id_item=item.id_item,
-            nome=item.nome,
-            descricao=item.descricao,
-            id_package=item.id_package,
-            status=item.status
-        )
-
-        return itemsOut
-    return HTTPException(status_code=404, detail="Encomenda não encontrada")
-
+    if items_id in DB.items:
+        return DB.getItem(items_id)
+    raise HTTPException(status_code=404, detail="Item da encomenda não encontrada")
 
 @router.put("/items/{items_id}")
-async def update_items(items_id: int, update: ItemUpdate):
+def update_items(items_id: int, update: ItemUpdate):
     update_dict = update.model_dump()
-    if items_id in items:
-        
+    if items_id in DB.items:
+
         if update_dict['nome'] is not None:
-            items[items_id].nome = update_dict['nome']
+            DB.items[items_id].nome = update_dict['nome']
 
         if update_dict['descricao'] is not None:
-            items[items_id].descricao = update_dict['descricao']
+            DB.items[items_id].descricao = update_dict['descricao']
 
         if update_dict['id_package'] is not None:
-            items[items_id].id_package = update_dict['id_package']
+            DB.items[items_id].id_package = update_dict['id_package']
 
-        
-        item = items[items_id]
-        itemsOut = ItemOut(
-            id_item=item.id_item,
-            nome=item.nome,
-            descricao=item.descricao,
-            id_package=item.id_package,
-            status=item.status
-        )
+        return DB.getItem(items_id)
+    raise HTTPException(status_code=404, detail="Item da encomenda não encontrada")
 
-        return itemsOut
-
-
-    return HTTPException(status_code=404, detail="Encomenda não encontrada")
-
-
-@router.get("/items/{items_id}/status")
-async def update_items_status(items_id: int):
-    if items_id in items:
-
-        items[items_id].status = not items[items_id].status
-
-        item = items[items_id]
-        itemsOut = ItemOut(
-            id_item=item.id_item,
-            nome=item.nome,
-            descricao=item.descricao,
-            id_package=item.id_package,
-            status=item.status
-        )
-
-        return itemsOut
-        
-
-    return HTTPException(status_code=404, detail="Encomenda não encontrada")
-
+@router.put("/items/{items_id}/status")
+def update_items_status(items_id: int):
+    if items_id in DB.items:
+        DB.items[items_id].status = not DB.items[items_id].status
+        return DB.getItem(items_id)
+    raise HTTPException(status_code=404, detail="Item da encomenda não encontrada")
 
 @router.delete("/items/{items_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_items(items_id: int):
-    if items_id in items:
-
-        del items[items_id]
-        
-        return {'message': 'Encomenda Deletada com Sucesso'}
-
-    return HTTPException(status_code=404, detail="Encomenda não encontrada")
+    if items_id in DB.items:
+        del DB.items[items_id]
+        return {'message': 'Item da encomenda Deletada com Sucesso'}
+    raise HTTPException(status_code=404, detail="Item da encomenda não encontrada")
