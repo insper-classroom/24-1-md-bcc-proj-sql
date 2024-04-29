@@ -28,6 +28,10 @@ class DB:
     @classmethod
     def getMovimentacao(cls, id):
         return cls.movimentacoes[id]
+    
+    @classmethod
+    def getMovimentacoes(cls):
+        return cls.movimentacoes.values()
 
     @classmethod
     def checkPackage(cls, id):
