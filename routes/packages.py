@@ -18,7 +18,8 @@ def create_package(packageIn: PackageIn):
     DB.checkUser(packageIn.id_user)
     package_dict = packageIn.model_dump()
 
-    id = len(DB.packages)+1
+    id = DB.packagesNextID
+    DB.packagesIncID()
     package_dict['id_package'] = id
     package = Package(**package_dict)
     DB.packages[id] = package

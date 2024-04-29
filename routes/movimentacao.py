@@ -10,8 +10,8 @@ router = APIRouter()
 @router.get("/movimentacao", response_model=List[Movimentacao], tags=["movimentacao"])
 def get_movimentacao(id_encomenda: int = None, id_movimentacao: int = None): 
     """Returns a Specific Movimentação based on the id for the move and the Package id"""
-    if id_movimentacao and id_movimentacao:
-        movimentacao = next(filter(lambda mov: mov.id_encomenda == id_encomenda and mov.id_movimentacao == id_movimentacao, DB.movimentacoes.values()), None)
+    if id_movimentacao:
+        movimentacao = DB.getMovimentacao(id_movimentacao)
         if movimentacao:
             return [movimentacao]
         raise HTTPException(status_code=404, detail="Movimentação não encontrada")
@@ -22,12 +22,6 @@ def get_movimentacao(id_encomenda: int = None, id_movimentacao: int = None):
             return movimentacoesDaEncomenda
         raise HTTPException(status_code=404, detail="Nenhuma movimentação encontrada para a encomenda informada")
 
-    if id_movimentacao:
-        movimentacao = next(filter(lambda mov: mov.id_movimentacao == id_movimentacao, DB.movimentacoes.values()), None)
-        if movimentacao:
-            return [movimentacao]
-        raise HTTPException(status_code=404, detail="Movimentação não encontrada")
-
     return DB.getMovimentacoes()
 
 @router.post("/movimentacao", response_model=Movimentacao, status_code=status.HTTP_201_CREATED, tags=["movimentacao"])
@@ -35,7 +29,8 @@ def nova_movimentacao(movIn : MovimentacaoIn):
     """Creates a New Movimentação"""
     DB.checkPackage(movIn.id_encomenda)
     mov_dict = movIn.model_dump()
-    mov_dict['id_movimentacao'] = len(DB.movimentacoes) + 1
+    mov_dict['id_movimentacao'] = DB.movimentacoesNextID
+    DB.movimentacoesIncID()
     mov_dict['data'] = datetime.now()
     mov = Movimentacao(**mov_dict)
     DB.movimentacoes[mov.id_movimentacao] = mov

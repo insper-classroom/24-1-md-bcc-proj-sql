@@ -21,7 +21,8 @@ def create_account(userIn: UserIn):
     """Creates a New Account"""
     user_dict = userIn.model_dump()
 
-    user_dict['id_user'] = len(DB.users)+1  
+    user_dict['id_user'] = DB.usersNextID
+    DB.usersIncID() 
     user_dict['senha'] = str(hash(user_dict['senha'] + user_dict['nome']))
     user = User(**user_dict)
     DB.users[user.id_user] = user

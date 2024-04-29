@@ -25,8 +25,32 @@ class DB:
         1: Item(id_item=1, nome="Celular", descricao="Celular ShaoMing", id_package=1, status=True),
     }
 
+
+    movimentacoesNextID = 3
+    usersNextID = 2
+    packagesNextID = 2
+    itemsNextID = 2
+
+    @classmethod
+    def movimentacoesIncID(cls):
+        cls.movimentacoesNextID += 1
+
+    @classmethod
+    def usersIncID(cls):
+        cls.usersNextID += 1
+    
+    @classmethod
+    def packagesIncID(cls):
+        cls.packagesNextID += 1
+    
+    @classmethod
+    def itemsIncID(cls):
+        cls.itemsNextID += 1
+
     @classmethod
     def getMovimentacao(cls, id):
+        if id not in cls.movimentacoes:
+            raise HTTPException(status_code=404, detail="Movimentação não encontrada")
         return cls.movimentacoes[id]
     
     @classmethod
