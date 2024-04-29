@@ -13,10 +13,12 @@ router = APIRouter()
 
 @router.get("/accounts/", response_model=List[UserOut])
 def list_account():
+    """Lists all Accounts"""
     return DB.getUsers()
 
 @router.post("/accounts/", response_model=UserOut, status_code=status.HTTP_201_CREATED)
 def create_account(userIn: UserIn):
+    """Creates a New Account"""
     user_dict = userIn.model_dump()
 
     user_dict['id_user'] = len(DB.users)+1  
@@ -28,12 +30,14 @@ def create_account(userIn: UserIn):
 
 @router.get("/accounts/{user_id}", response_model=UserOut)
 def get_account(user_id: int):
+    """Returns an Account given its id"""
     if user_id in DB.users:
         return DB.getUser(user_id)
     raise HTTPException(status_code=404, detail="Usuário não encontrado")
 
 @router.put("/accounts/{user_id}")
 def update_account(user_id: int, update: UserUpdateSenha):
+    """Updates an Accounts's information"""
     update_dict = update.model_dump()
     if user_id in DB.users:
         if str(hash(update_dict['senha'] + DB.users[user_id].nome)) == DB.users[user_id].senha:
@@ -44,6 +48,7 @@ def update_account(user_id: int, update: UserUpdateSenha):
 
 @router.put("/accounts/{user_id}/status")
 def update_account_status(user_id: int):
+    """Updates an Account's Status (in use or deactivated)"""
     if user_id in DB.users:
         DB.users[user_id].status = not DB.users[user_id].status
         return DB.getUser(user_id)
@@ -51,6 +56,7 @@ def update_account_status(user_id: int):
 
 @router.delete("/accounts/{user_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_account(user_id: int):
+    """Deletes an Account's information"""
     if user_id in DB.users:
         del DB.users[user_id]
         return {'message': 'Usuário Deletado com Sucesso'}

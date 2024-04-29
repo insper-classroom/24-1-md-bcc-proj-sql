@@ -13,6 +13,12 @@ def list_package():
 
 @router.post("/packages/", response_model=PackageOut, status_code=status.HTTP_201_CREATED)
 def create_package(packageIn: PackageIn):
+
+    """
+    Creates a Package
+    
+    """
+
     DB.checkUser(packageIn.id_user)
     package_dict = packageIn.model_dump()
 
@@ -25,18 +31,21 @@ def create_package(packageIn: PackageIn):
 
 @router.get("/packages/{package_id}", response_model=PackageOut)
 def get_package(id_package: int):
+    """Returns a Package given its id"""
     if id_package in DB.packages:
         return DB.getPackage(id_package)
     raise HTTPException(status_code=404, detail="Encomenda não encontrada")
 
 @router.put("/packages/{package_id}", response_model=PackageOut)
 def update_package(package_id: int, update: PackageUpdate):
+    """Updates a Package's information"""
     update_dict = update.model_dump()
     DB.addItemToPackage(package_id, update_dict['id_item'])
     return DB.getPackage(package_id)
 
 @router.get("/packages/{package_id}/status")
 def update_package_status(package_id: int):
+    """Updates a Package's Status (if it has been delivered or not)"""
     if package_id in DB.packages:
         DB.packages[package_id].status = not DB.packages[package_id].status
         return DB.getPackage(package_id)
@@ -44,6 +53,7 @@ def update_package_status(package_id: int):
 
 @router.delete("/packages/{package_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_package(package_id: int):
+    """Deletes a Package's Information"""
     if package_id in DB.packages:
         del DB.packages[package_id]
         return {'message': 'Encomenda Deletada com Sucesso'}
