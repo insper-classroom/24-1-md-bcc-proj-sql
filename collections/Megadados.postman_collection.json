@@ -72,14 +72,42 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "localhost:8000/movimentacao/3",
+							"raw": "localhost:8000/movimentacao/1",
 							"host": [
 								"localhost"
 							],
 							"port": "8000",
 							"path": [
 								"movimentacao",
-								"3"
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "mov:status",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"status\": \"Encomenda saiu para entrega!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/movimentacao/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"movimentacao",
+								"1"
 							]
 						}
 					},
@@ -194,6 +222,25 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "users:delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/accounts/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"accounts",
+								"1"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -261,14 +308,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:8000/items/2",
+							"raw": "localhost:8000/items/1",
 							"host": [
 								"localhost"
 							],
 							"port": "8000",
 							"path": [
 								"items",
-								"2"
+								"1"
 							]
 						}
 					},
@@ -280,14 +327,14 @@
 						"method": "PUT",
 						"header": [],
 						"url": {
-							"raw": "localhost:8000/items/2/status",
+							"raw": "localhost:8000/items/1/status",
 							"host": [
 								"localhost"
 							],
 							"port": "8000",
 							"path": [
 								"items",
-								"2",
+								"1",
 								"status"
 							]
 						}
@@ -300,14 +347,14 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "localhost:8000/items/2",
+							"raw": "localhost:8000/items/1",
 							"host": [
 								"localhost"
 							],
 							"port": "8000",
 							"path": [
 								"items",
-								"2"
+								"1"
 							]
 						}
 					},
@@ -358,6 +405,53 @@
 							"port": "8000",
 							"path": [
 								"packages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "pack:addItem",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id_user\": 1,\r\n    \"id_item\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/packages/1",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"packages",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "pack:delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:8000/packages/2",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"packages",
+								"2"
 							]
 						}
 					},
