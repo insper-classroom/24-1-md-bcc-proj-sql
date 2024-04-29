@@ -40,10 +40,10 @@ def nova_movimentacao(movIn : MovimentacaoIn):
     return mov
 
 @router.put("/movimentacao/{id_movimentacao}", response_model=Movimentacao)
-def atualiza_movimentacao(id_movimentacao: int, mov: MovimentacaoUpdate):
+def atualiza_movimentacao(id_movimentacao: int, movUpdate: MovimentacaoUpdate):
     mov = DB.movimentacoes.get(id_movimentacao)
     if mov:
-        mov.status = mov.status
+        mov.status = movUpdate.status
         return mov
     raise HTTPException(status_code=404, detail="Movimentação não encontrada")
 

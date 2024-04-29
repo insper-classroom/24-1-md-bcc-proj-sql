@@ -39,18 +39,22 @@ class DB:
             raise HTTPException(status_code=404, detail="Encomenda não encontrada")
     
     @classmethod
+    def getItems(cls,id_package):
+        return list(map(lambda item: ItemOut(**item.model_dump()), filter(lambda item: item.id_package == id_package, cls.items.values())))
+    
+    @classmethod
+    def genPackageOut(cls,package):
+        package = PackageOut(**package.model_dump())
+        package.produtos = cls.getItems(package.id_package)
+        return package
+    
+    @classmethod
     def getPackage(cls, id):
-        return PackageOut(**cls.packages[id].model_dump())
-
+        return cls.genPackageOut(cls.packages[id])
+    
     @classmethod
     def getPackages(cls):
-        def getItems(id_package):
-            return list(map(lambda item: ItemOut(**item.model_dump()), filter(lambda item: item.id_package == id_package, cls.items.values())))
-        def genPackageOut(package):
-            package = PackageOut(**package.model_dump())
-            package.produtos = getItems(package.id_package)
-            return package
-        return list(map(lambda package : genPackageOut(package), cls.packages.values()))
+        return list(map(lambda package : cls.genPackageOut(package), cls.packages.values()))
 
     @classmethod
     def checkUser(cls, id):
@@ -73,9 +77,9 @@ class DB:
     @classmethod
     def getItem(cls, id):
         return ItemOut(**cls.items[id].model_dump())
-
+    
     @classmethod
-    def getItems(cls):
+    def getAllItems(cls):
         return list(map(lambda item: ItemOut(**item.model_dump()), cls.items.values()))
     
     @classmethod

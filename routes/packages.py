@@ -29,11 +29,11 @@ def get_package(id_package: int):
         return DB.getPackage(id_package)
     raise HTTPException(status_code=404, detail="Encomenda não encontrada")
 
-@router.put("/packages/{package_id}", response_model=PackageOut)
-def update_package(package_id: int, update: PackageUpdate):
+@router.put("/packages/{id_package}", response_model=PackageOut)
+def update_package(id_package: int, update: PackageUpdate):
     update_dict = update.model_dump()
-    DB.addItemToPackage(package_id, update_dict['id_item'])
-    return DB.getPackage(package_id)
+    DB.addItemToPackage(id_package, update_dict['id_item'])
+    return DB.getPackage(id_package)
 
 @router.get("/packages/{package_id}/status")
 def update_package_status(package_id: int):

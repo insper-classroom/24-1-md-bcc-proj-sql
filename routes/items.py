@@ -8,7 +8,7 @@ router = APIRouter()
 
 @router.get("/items/", response_model=List[ItemOut])
 def list_items():
-    return DB.getItems()
+    return DB.getAllItems()
 
 @router.post("/items/", response_model=ItemOut, status_code=status.HTTP_201_CREATED)
 def create_items(itemsIn: ItemIn):
