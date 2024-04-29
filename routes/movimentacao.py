@@ -7,7 +7,7 @@ from datetime import datetime
 
 router = APIRouter()
 
-@router.get("/movimentacao", response_model=List[Movimentacao])
+@router.get("/movimentacao", response_model=List[Movimentacao], tags=["movimentacao"])
 def get_movimentacao(id_encomenda: int = None, id_movimentacao: int = None): 
     """Returns a Specific Movimentação based on the id for the move and the Package id"""
     if id_movimentacao and id_movimentacao:
@@ -30,7 +30,7 @@ def get_movimentacao(id_encomenda: int = None, id_movimentacao: int = None):
 
     return DB.getMovimentacoes()
 
-@router.post("/movimentacao", response_model=Movimentacao, status_code=status.HTTP_201_CREATED)
+@router.post("/movimentacao", response_model=Movimentacao, status_code=status.HTTP_201_CREATED, tags=["movimentacao"])
 def nova_movimentacao(movIn : MovimentacaoIn):
     """Creates a New Movimentação"""
     DB.checkPackage(movIn.id_encomenda)
@@ -41,7 +41,7 @@ def nova_movimentacao(movIn : MovimentacaoIn):
     DB.movimentacoes[mov.id_movimentacao] = mov
     return mov
 
-@router.put("/movimentacao/{id_movimentacao}", response_model=Movimentacao)
+@router.put("/movimentacao/{id_movimentacao}", response_model=Movimentacao, tags=["movimentacao"])
 def atualiza_movimentacao(id_movimentacao: int, movUpdate: MovimentacaoUpdate):
     """Updates a Movimentação's Status (where the package is in relation to the delivery pipeline)"""
     mov = DB.movimentacoes.get(id_movimentacao)
@@ -50,7 +50,7 @@ def atualiza_movimentacao(id_movimentacao: int, movUpdate: MovimentacaoUpdate):
         return mov
     raise HTTPException(status_code=404, detail="Movimentação não encontrada")
 
-@router.delete("/movimentacao/{id_movimentacao}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/movimentacao/{id_movimentacao}", status_code=status.HTTP_204_NO_CONTENT, tags=["movimentacao"])
 def deleta_movimentacao(id_movimentacao: int):
     """Deletes a Movimentação's information"""
     mov = DB.movimentacoes.get(id_movimentacao)

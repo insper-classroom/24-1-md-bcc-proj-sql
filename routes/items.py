@@ -6,12 +6,12 @@ from db import DB
 
 router = APIRouter()
 
-@router.get("/items/", response_model=List[ItemOut])
+@router.get("/items/", response_model=List[ItemOut], tags=["items"])
 def list_items():
     """Lists all Items"""
     return DB.getItems()
 
-@router.post("/items/", response_model=ItemOut, status_code=status.HTTP_201_CREATED)
+@router.post("/items/", response_model=ItemOut, status_code=status.HTTP_201_CREATED, tags=["items"])
 def create_items(itemsIn: ItemIn):
     """Creates a New Item"""
     if itemsIn.id_package:
@@ -25,14 +25,14 @@ def create_items(itemsIn: ItemIn):
 
     return DB.getItem(id)
 
-@router.get("/items/{items_id}", response_model=ItemOut)
+@router.get("/items/{items_id}", response_model=ItemOut, tags=["items"])
 def get_items(items_id: int):
     """Returns an Item's information based on the id given"""
     if items_id in DB.items:
         return DB.getItem(items_id)
     raise HTTPException(status_code=404, detail="Item da encomenda não encontrada")
 
-@router.put("/items/{items_id}")
+@router.put("/items/{items_id}", response_model=ItemOut, tags=["items"])
 def update_items(items_id: int, update: ItemUpdate):
     """Updates an Item's information"""
     update_dict = update.model_dump()
@@ -50,7 +50,7 @@ def update_items(items_id: int, update: ItemUpdate):
         return DB.getItem(items_id)
     raise HTTPException(status_code=404, detail="Item da encomenda não encontrada")
 
-@router.put("/items/{items_id}/status")
+@router.put("/items/{items_id}/status", response_model=ItemOut, tags=["items"])
 def update_items_status(items_id: int):
     """Updates an Item's Status (Available or Not)"""
     if items_id in DB.items:
@@ -58,7 +58,7 @@ def update_items_status(items_id: int):
         return DB.getItem(items_id)
     raise HTTPException(status_code=404, detail="Item da encomenda não encontrada")
 
-@router.delete("/items/{items_id}", status_code=status.HTTP_204_NO_CONTENT)
+@router.delete("/items/{items_id}", status_code=status.HTTP_204_NO_CONTENT, tags=["items"])
 def delete_items(items_id: int):
     """Deletes a Package's information"""
     if items_id in DB.items:
