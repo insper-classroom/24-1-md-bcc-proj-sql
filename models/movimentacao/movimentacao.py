@@ -4,13 +4,13 @@ import datetime
 class Movimentacao(BaseModel):
     id_movimentacao: int
     id_encomenda: int
-    id_localizacao: int
+    endereco: str
     status: str
     data: datetime.datetime
 
 class MovimentacaoIn(BaseModel):
     id_encomenda: int
-    id_localizacao: int
+    endereco: str
     status: str
 
 class MovimentacaoUpdate(BaseModel):
