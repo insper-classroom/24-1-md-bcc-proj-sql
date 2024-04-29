@@ -28,18 +28,18 @@ def get_package(id_package: int):
         return DB.getPackage(id_package)
     raise HTTPException(status_code=404, detail="Encomenda não encontrada")
 
-@router.put("/packages/{package_id}", response_model=PackageOut)
-def update_package(package_id: int, update: PackageUpdate):
-    update_dict = update.model_dump()
-    if package_id in DB.packages:
-        if update_dict.id_user == DB.packages[package_id].id_user:
-            # TODO: Buscar lista de produtos do pacote e adicionar o novo produto nela
-            return "Tem que terminar a rota"
-        return HTTPException(status_code=404, detail="Usuário Dono da Encomenda Incorreto")
-    raise HTTPException(status_code=404, detail="Encomenda não encontrada")
+# @router.put("/packages/{package_id}", response_model=PackageOut)
+# def update_package(package_id: int, update: PackageUpdate):
+#     update_dict = update.model_dump()
+#     if package_id in DB.packages:
+#         if update_dict.id_user == DB.packages[package_id].id_user:
+#             DB.addItemToPackage(package_id, update_dict.id_item)
+#             return DB.getPackage(package_id)
+#         return HTTPException(status_code=404, detail="Usuário Dono da Encomenda Incorreto")
+#     raise HTTPException(status_code=404, detail="Encomenda não encontrada")
 
 @router.get("/packages/{package_id}/status")
-async def update_package_status(package_id: int):
+def update_package_status(package_id: int):
     if package_id in DB.packages:
         DB.packages[package_id].status = not DB.packages[package_id].status
         return DB.getPackage(package_id)
