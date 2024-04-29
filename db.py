@@ -66,9 +66,22 @@ class DB:
         return UserOut(**cls.users[id].model_dump())
     
     @classmethod
+    def checkItem(cls, id):
+        if id not in cls.items:
+            raise HTTPException(status_code=404, detail="Item não encontrado")
+    
+    @classmethod
     def getItem(cls, id):
         return ItemOut(**cls.items[id].model_dump())
 
     @classmethod
     def getItems(cls):
         return list(map(lambda item: ItemOut(**item.model_dump()), cls.items.values()))
+    
+    @classmethod
+    def addItemToPackage(cls, id_package, id_item):
+        cls.checkPackage(id_package)
+        cls.checkItem(id_item)
+        if cls.items[id_item].id_package is not None:
+            raise HTTPException(status_code=404, detail="Item já está em outra encomenda")
+        cls.items[id_item].id_package = id_package

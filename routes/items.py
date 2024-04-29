@@ -12,9 +12,10 @@ def list_items():
 
 @router.post("/items/", response_model=ItemOut, status_code=status.HTTP_201_CREATED)
 def create_items(itemsIn: ItemIn):
-    DB.checkPackage(itemsIn.id_package)
-    items_dict = itemsIn.model_dump()
+    if itemsIn.id_package:
+        DB.checkPackage(itemsIn.id_package)
 
+    items_dict = itemsIn.model_dump()
     id = len(DB.items)+1
     items_dict['id_item'] = id
     item = Item(**items_dict)
