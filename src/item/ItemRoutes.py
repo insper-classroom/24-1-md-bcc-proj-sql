@@ -18,6 +18,11 @@ def get_all():
     """Lists all Items"""
     return ItemRepository.get_all(db)
 
+@router.get("/items/package/{package_id}", response_model=List[ItemOut], tags=["items"])
+def get_all_from_package(package_id: int):
+    """Returns a list of Items in a Package based on the Package's id given"""
+    return ItemRepository.get_all_from_package(db, package_id)
+
 @router.post("/items/", response_model=ItemOut, status_code=status.HTTP_201_CREATED, tags=["items"])
 def post(itemIn: ItemIn):
     """Creates a New Item"""
