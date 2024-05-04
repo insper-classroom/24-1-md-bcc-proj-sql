@@ -1,12 +1,7 @@
 from fastapi import APIRouter, HTTPException, status
 
 from typing import List
-
-from models.user.user import User
-from models.user.user_in import UserIn
-from models.user.user_out import UserOut
-from models.user.user_update import UserUpdateSenha
-
+from models.user.user import User, UserIn, UserOut, UserUpdateSenha
 from db import DB
 
 router = APIRouter()

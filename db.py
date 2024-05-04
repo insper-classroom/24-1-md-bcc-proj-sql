@@ -1,8 +1,7 @@
 from models.movimentacao.movimentacao import Movimentacao
 from models.package.package import Package, PackageOut
 from models.item.item import Item, ItemOut
-from models.user.user import User
-from models.user.user_out import UserOut
+from models.user.user import User, UserOut
 from fastapi import HTTPException
 
 import datetime
