@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, DateTime
+from sqlalchemy import Boolean, Column, Integer, String, DateTime
 from .UserDTO import UserOut
 
 from database import Base
@@ -11,7 +11,7 @@ class User(Base):
     id_user = Column(Integer, primary_key=True, index=True)
     nome = Column(String)
     sobrenome = Column(String)
-    data_criacao: Column(DateTime, default=datetime.now())  # type: ignore
+    data_criacao = Column(DateTime, default=datetime.now()) 
     senha = Column(String)
     email = Column(String)
     status = Column(Boolean, default=True)

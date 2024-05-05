@@ -3,6 +3,7 @@ from fastapi import APIRouter, HTTPException, status # type: ignore
 from typing import List
 from .TrackingDTO import Tracking, TrackingIn, TrackingUpdate
 from .TrackingRepository import TrackingRepository
+from src.package.PackageRepository import PackageRepository
 from database import get_db
 
 router = APIRouter()
@@ -21,11 +22,9 @@ def get_tracking(id_package: int = None, id_tracking: int = None):
 @router.post("/tracking", response_model=Tracking, status_code=status.HTTP_201_CREATED, tags=["tracking"])
 def new_tracking(movIn : TrackingIn):
     """Creates a New Tracking"""
-    # verificar em package_repository a existencia desse package
-    # if itemIn.id_package:
-    #     DB.checkPackage(itemIn.id_package)
-
-    return TrackingRepository.create(db,movIn)
+    if(PackageRepository.existsById(db, movIn.id_package)):
+        return TrackingRepository.create(db,movIn)
+    raise HTTPException(status_code=404, detail="Encomenda não encontrada")
 
 @router.put("/tracking/{id_tracking}", response_model=Tracking, tags=["tracking"])
 def atualiza_tracking(id_tracking: int, movUpdate: TrackingUpdate):

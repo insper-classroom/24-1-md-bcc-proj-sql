@@ -17,10 +17,10 @@ class ItemRepository:
         return list(map(lambda item: item.to_itemOut(), items))
     
     def get_all_from_package(db: Session, id_package) -> ItemOut:
-        items = db.query(Item).filter(Item.id_package == id_package).first()
+        items = db.query(Item).filter(Item.id_package == id_package).all()
         if items:
             return list(map(lambda item: item.to_itemOut(), items))
-        raise HTTPException(status_code=404, detail="Encomenda não possui Items")
+        raise HTTPException(status_code=404, detail="Encomenda não possui itens")
     
     def create(db: Session, item: ItemIn) -> ItemOut:
         item = Item(**item.model_dump())

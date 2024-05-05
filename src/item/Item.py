@@ -11,8 +11,7 @@ class Item(Base):
     nome = Column(String)
     data_criacao = Column(DateTime, default=datetime.now()) 
     descricao = Column(String)
-    # id_package = Column(Integer, ForeignKey("packages.id_package"))
-    id_package = Column(Integer)
+    id_package = Column(Integer, ForeignKey("packages.id_package"))
     status = Column(Boolean, default=True)
 
     def to_itemOut(self) -> ItemOut:

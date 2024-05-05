@@ -3,6 +3,7 @@ from fastapi import HTTPException
 
 from .Package import Package
 from .PackageDTO import PackageIn, PackageOut
+from src.item.ItemDTO import ItemOut
 from typing import List
 
 class PackageRepository:
@@ -14,7 +15,7 @@ class PackageRepository:
     
     def get_all(db: Session) -> List[PackageOut]:
         packages = db.query(Package).all()
-        return list(map(lambda package: package.to_PackageOut(), packages))
+        return list(map(lambda package: package.to_packageOut(), packages))
     
     def create(db: Session, package: PackageIn) -> PackageOut:
         package = Package(**package.model_dump())
@@ -36,3 +37,6 @@ class PackageRepository:
         db.commit()
         if rows_deleted == 0:
             raise HTTPException(status_code=404, detail="Encomenda não encontrada")
+    
+    def existsById(db: Session, id_package: int) -> bool:
+        return db.query(Package).filter(Package.id_package == id_package).first() is not None

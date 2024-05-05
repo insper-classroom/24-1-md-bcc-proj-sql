@@ -21,9 +21,6 @@ def get_all():
 @router.post("/users/", response_model=UserOut, status_code=status.HTTP_201_CREATED, tags=["users"])
 def post(userIn: UserIn):
     """Creates a New User"""
-    # verificar em package_repository a existencia desse package
-    # if userIn.id_package:
-    #     DB.checkPackage(userIn.id_package)
     return UserRepository.create(db, userIn)
 
 @router.put("/users/{user_id}", response_model=UserOut, tags=["users"])

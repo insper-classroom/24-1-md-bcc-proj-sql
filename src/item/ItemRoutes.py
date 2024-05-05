@@ -3,6 +3,7 @@ from fastapi import APIRouter, HTTPException, status
 from typing import List
 from .ItemDTO import ItemIn, ItemOut, ItemUpdate
 from .ItemRepository import ItemRepository
+from src.package.PackageRepository import PackageRepository
 from database import get_db
 
 router = APIRouter()
@@ -26,10 +27,9 @@ def get_all_from_package(package_id: int):
 @router.post("/items/", response_model=ItemOut, status_code=status.HTTP_201_CREATED, tags=["items"])
 def post(itemIn: ItemIn):
     """Creates a New Item"""
-    # verificar em package_repository a existencia desse package
-    # if itemIn.id_package:
-    #     DB.checkPackage(itemIn.id_package)
-    return ItemRepository.create(db, itemIn)
+    if(itemIn.id_package == None or PackageRepository.existsById(db, itemIn.id_package)):
+        return ItemRepository.create(db, itemIn)
+    raise HTTPException(status_code=404, detail="Encomenda não encontrada")
 
 @router.put("/items/{item_id}", response_model=ItemOut, tags=["items"])
 def update(item_id: int, item_update: ItemUpdate):

@@ -10,8 +10,7 @@ class Package(Base):
     __tablename__ = "packages"
 
     id_package =  Column(Integer, primary_key=True, index=True)
-    # id_user = Column(Integer, ForeignKey("users.id_user"))
-    id_user = Column(Integer)
+    id_user = Column(Integer, ForeignKey("users.id_user"))
     data_criacao = Column(DateTime, default=datetime.now()) 
     status = Column(Boolean, default=True)
 
