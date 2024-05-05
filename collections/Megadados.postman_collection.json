@@ -7,37 +7,10 @@
 	},
 	"item": [
 		{
-			"name": "movimentacao",
+			"name": "tracking",
 			"item": [
 				{
-					"name": "mov",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"id_encomenda\": 1,\r\n    \"endereco\": \"Rua aaaaaaaaa\",\r\n    \"status\": \"Chegou ao centro de distribuicao.\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:8000/movimentacao",
-							"host": [
-								"localhost"
-							],
-							"port": "8000",
-							"path": [
-								"movimentacao"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "mov",
+					"name": "track:get",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -67,10 +40,46 @@
 					"response": []
 				},
 				{
-					"name": "mov",
+					"name": "track:new",
 					"request": {
-						"method": "DELETE",
+						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id_encomenda\": 1,\r\n    \"endereco\": \"Rua aaaaaaaaa\",\r\n    \"status\": \"Chegou ao centro de distribuicao.\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8000/movimentacao",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"movimentacao"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "track:status",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"status\": \"Encomenda saiu para entrega!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "localhost:8000/movimentacao/1",
 							"host": [
@@ -86,19 +95,10 @@
 					"response": []
 				},
 				{
-					"name": "mov:status",
+					"name": "track:delete",
 					"request": {
-						"method": "PUT",
+						"method": "DELETE",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"status\": \"Encomenda saiu para entrega!\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
 						"url": {
 							"raw": "localhost:8000/movimentacao/1",
 							"host": [
@@ -384,6 +384,14 @@
 					"response": []
 				},
 				{
+					"name": "pack:getItems",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
 					"name": "pack:new",
 					"request": {
 						"method": "POST",
@@ -411,7 +419,7 @@
 					"response": []
 				},
 				{
-					"name": "pack:addItem",
+					"name": "pack:status",
 					"request": {
 						"method": "PUT",
 						"header": [],
