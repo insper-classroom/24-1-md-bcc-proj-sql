@@ -7,4 +7,4 @@ Link do Vídeo Explicando a API - [Aqui](https://alinsperedu-my.sharepoint.com/:
 
 ##Diagrama de Classes - Banco de Dados
 
-![Diagrama](<Imagem do WhatsApp de 2024-05-05 à(s) 16.57.18_4bf3cb27.jpg>)
+![Diagrama](<diagrama.jpg>)
